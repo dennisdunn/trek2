@@ -1,40 +1,37 @@
 import './style.css'
-import ECS, { System } from './ecs';
+import ECS from './ecs';
+import { Logger, Plotter, Mover } from './systems';
 
-const msgList = document.getElementById("msgs")
-const logger = new System({ msg: null }, (ts, entity) => {
-  if (entity.msg) {
-    const msg = document.createElement('li');
-    msg.append(`${ts}: ${entity.msg}`);
-    msgList.append(msg);
-    entity.msg = null;
-  }
-})
+ECS.systems.push(new Logger(document.getElementById("msgcontainer")));
+ECS.systems.push(new Plotter(document.getElementById("plotter")));
+ECS.systems.push(new Mover())
 
-ECS.systems.push(logger);
-
-const entity = { msg: null };
+const entity = { msg: null, x: 10, y: 20, speed: 0, heading: 90, icon: '/favicon.ico' };
 ECS.entities.push(entity);
 
+const left = () => {
+  entity.heading -= 5;
+}
+const right = () => {
+  entity.heading += 5;
+}
+const speed = evt => {
+  entity.speed = evt.target.value;
+}
+
+document.getElementById("left").addEventListener('click', left);
+document.getElementById("right").addEventListener('click', right);
+document.getElementById("speed").addEventListener('input', speed);
+document.addEventListener('keydown', (evt) => {
+  switch (evt.key) {
+    case ',':
+      left();
+      break;
+    case '.':
+      right();
+      break;
+  }
+});
+
+
 ECS.start();
-
-setTimeout(() => {
-  entity.msg = 'one fish';
-}, 0);
-
-setTimeout(() => {
-  entity.msg = 'two fish';
-}, 100);
-
-setTimeout(() => {
-  entity.msg = 'red fish';
-}, 200);
-
-setTimeout(() => {
-  entity.msg = 'blue fish';
-}, 300);
-
-const btn = document.getElementById('doit');
-btn.addEventListener('click',()=>{
-  entity.msg = "The Do It! button was clicked!";
-})

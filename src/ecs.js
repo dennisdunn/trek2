@@ -3,11 +3,13 @@
  */
 
 export class System {
-    constructor(template, updater) {
+    constructor(template) {
         this.propNames = Object.keys(template);
-        this.update = updater;
     }
     
+    /** Run each tick before updating entities. */
+    init(){}
+
     _canUpdate(entity) {
         const keys = Object.keys(entity);
         this.propNames.forEach(propName => {
@@ -19,7 +21,7 @@ export class System {
     }
 
     _tick(timestamp, entity) {
-        if (this._canUpdate(entity)) {
+        if (this.update && this._canUpdate(entity)) {
             this.update(timestamp, entity);
         }
     }
@@ -47,6 +49,7 @@ export class ECS {
     _tick(timestamp) {
         if (this._running) {
             this.systems.forEach(system => {
+                system.init();
                 this.entities.forEach(entity => {
                     system._tick(timestamp, entity)
                 });
