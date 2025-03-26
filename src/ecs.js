@@ -7,6 +7,7 @@ export class System {
         this.propNames = Object.keys(template);
         this.update = updater;
     }
+    
     _canUpdate(entity) {
         const keys = Object.keys(entity);
         this.propNames.forEach(propName => {
@@ -16,6 +17,7 @@ export class System {
         });
         return true;
     }
+
     _tick(timestamp, entity) {
         if (this._canUpdate(entity)) {
             this.update(timestamp, entity);

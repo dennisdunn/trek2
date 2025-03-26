@@ -1,24 +1,40 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+import ECS, { System } from './ecs';
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+const msgList = document.getElementById("msgs")
+const logger = new System({ msg: null }, (ts, entity) => {
+  if (entity.msg) {
+    const msg = document.createElement('li');
+    msg.append(`${ts}: ${entity.msg}`);
+    msgList.append(msg);
+    entity.msg = null;
+  }
+})
 
-setupCounter(document.querySelector('#counter'))
+ECS.systems.push(logger);
+
+const entity = { msg: null };
+ECS.entities.push(entity);
+
+ECS.start();
+
+setTimeout(() => {
+  entity.msg = 'one fish';
+}, 0);
+
+setTimeout(() => {
+  entity.msg = 'two fish';
+}, 100);
+
+setTimeout(() => {
+  entity.msg = 'red fish';
+}, 200);
+
+setTimeout(() => {
+  entity.msg = 'blue fish';
+}, 300);
+
+const btn = document.getElementById('doit');
+btn.addEventListener('click',()=>{
+  entity.msg = "The Do It! button was clicked!";
+})
