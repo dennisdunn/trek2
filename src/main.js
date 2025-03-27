@@ -7,19 +7,33 @@ ECS.systems.push(new Logger(document.getElementById("msgcontainer")));
 ECS.systems.push(new Renderer(document.getElementById("plotter")));
 ECS.systems.push(new Mover())
 
-const ncc1701 = { msg: null, x: randInt(300), y: randInt(300), speed: 1, heading: randInt(360), icon: mkIcon('/assets/fed-fill.png')};
-const spacedock = { msg: null, x: randInt(300), y: randInt(300), icon: mkIcon('/assets/spacedock-fill.png') };
+const ncc1701 = {
+  msg: null,
+  x: randInt(300),
+  y: randInt(300),
+  speed: 1,
+  heading: randInt(360),
+  icon: mkIcon('/assets/starship.svg', 0.07, '#007'),
+  scale: 0.07
+};
 
 ECS.entities.push(ncc1701);
-ECS.entities.push(spacedock);
+ECS.entities.push({
+  msg: null,
+  x: randInt(300),
+  y: randInt(300),
+  icon: mkIcon('/assets/dock.svg', 0.1, '#070')
+});
+
 for (let x = 0; x < 10; x++) {
-  ECS.entities.push({ 
-    msg: null, 
-    x: randInt(300), 
-    y: randInt(300), 
-    speed: Math.random()*2, 
+  ECS.entities.push({
+    msg: null,
+    x: randInt(300),
+    y: randInt(300),
+    speed: Math.random() * 2,
     heading: randInt(360),
-     icon: mkIcon('/assets/klingon-fill.png') })
+    icon: mkIcon('/assets/klingon.svg', 0.05, '#700')
+  })
 }
 
 
