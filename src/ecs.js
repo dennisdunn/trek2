@@ -6,18 +6,19 @@ export class System {
     constructor(template) {
         this.propNames = Object.keys(template);
     }
-    
+
     /** Run each tick before updating entities. */
-    init(){}
+    init() { }
 
     _canUpdate(entity) {
+        let retVal = true;
         const keys = Object.keys(entity);
         this.propNames.forEach(propName => {
             if (!keys.includes(propName)) {
-                return false;
+                retVal = false;
             }
         });
-        return true;
+        return retVal;
     }
 
     _tick(timestamp, entity) {

@@ -1,37 +1,30 @@
 import './style.css'
 import ECS from './ecs';
-import { Logger, Plotter, Mover } from './systems';
+import { Logger, Renderer, Mover } from './systems';
+import { mkIcon, bindHandler, randInt } from './tools';
 
 ECS.systems.push(new Logger(document.getElementById("msgcontainer")));
-ECS.systems.push(new Plotter(document.getElementById("plotter")));
+ECS.systems.push(new Renderer(document.getElementById("plotter")));
 ECS.systems.push(new Mover())
 
-const entity = { msg: null, x: 10, y: 20, speed: 0, heading: 90, icon: '/favicon.ico' };
-ECS.entities.push(entity);
+const ncc1701 = { msg: null, x: randInt(300), y: randInt(300), speed: 1, heading: randInt(360), icon: mkIcon('/assets/fed-fill.png')};
+const spacedock = { msg: null, x: randInt(300), y: randInt(300), icon: mkIcon('/assets/spacedock-fill.png') };
 
-const left = () => {
-  entity.heading -= 5;
-}
-const right = () => {
-  entity.heading += 5;
-}
-const speed = evt => {
-  entity.speed = evt.target.value;
+ECS.entities.push(ncc1701);
+ECS.entities.push(spacedock);
+for (let x = 0; x < 10; x++) {
+  ECS.entities.push({ 
+    msg: null, 
+    x: randInt(300), 
+    y: randInt(300), 
+    speed: Math.random()*2, 
+    heading: randInt(360),
+     icon: mkIcon('/assets/klingon-fill.png') })
 }
 
-document.getElementById("left").addEventListener('click', left);
-document.getElementById("right").addEventListener('click', right);
-document.getElementById("speed").addEventListener('input', speed);
-document.addEventListener('keydown', (evt) => {
-  switch (evt.key) {
-    case ',':
-      left();
-      break;
-    case '.':
-      right();
-      break;
-  }
-});
 
+bindHandler('left', 'click', ncc1701, obj => obj.heading -= 5);
+bindHandler('right', 'click', ncc1701, obj => obj.heading += 5);
+bindHandler('speed', 'input', ncc1701, (obj, evt) => obj.speed = evt.target.value);
 
 ECS.start();
