@@ -19,7 +19,6 @@ const ncc1701 = {
 
 ECS.entities.push(ncc1701);
 ECS.entities.push({
-  msg: null,
   x: randInt(300),
   y: randInt(300),
   icon: mkIcon('/assets/dock.svg', 0.1, '#070')
@@ -27,7 +26,6 @@ ECS.entities.push({
 
 for (let x = 0; x < 10; x++) {
   ECS.entities.push({
-    msg: null,
     x: randInt(300),
     y: randInt(300),
     speed: Math.random() * 2,

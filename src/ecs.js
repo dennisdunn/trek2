@@ -49,6 +49,7 @@ export class ECS {
 
     _tick(timestamp) {
         if (this._running) {
+            this.entities = this.entities.filter(entity => !entity.dead) // prune
             this.systems.forEach(system => {
                 system.init();
                 this.entities.forEach(entity => {

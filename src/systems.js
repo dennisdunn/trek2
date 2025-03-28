@@ -41,12 +41,6 @@ export class Renderer extends System {
             this._ctx.save();
             this._ctx.translate(entity.x, entity.y);
             this._ctx.rotate(deg2Radian(entity.heading));
-            // this._ctx.scale(entity.scale, entity.scale);
-            // if (entity.color) {
-            //     this._ctx.fillStyle = entity.color;
-            //     this._ctx.fillRect(0, 0, entity.icon.width, entity.icon.height);
-            //     this._ctx.globalCompositeOperation = "destination-in";
-            // }
             this._ctx.drawImage(entity.icon, 0, 0);
             this._ctx.restore();
         }
