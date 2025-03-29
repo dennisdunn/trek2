@@ -29,6 +29,8 @@ export const mkIcon = (url, scale = 1, color = '#000') => {
     return scaled;
 }
 
+export const cloneIcon = (icon, options = {}) => ({ ...icon, ...options })
+
 export const bindHandler = (id, evt, obj, fn) => {
     document.getElementById(id).addEventListener(evt, fn.bind(null, obj));
 }
@@ -36,5 +38,7 @@ export const bindHandler = (id, evt, obj, fn) => {
 export const deg2Radian = (deg) => (Math.PI / 180) * deg;
 
 export const randInt = (max) => Math.floor(Math.random() * max);
-
 export const randFloat = (max) => Math.random() * max;
+export const randPos = (mx, my) => ({ x: randInt(mx), y: randInt(my) })
+export const randNav = (mspeed, mheading) => ({ speed: randFloat(mspeed), heading: randInt(mheading) })
+export const p = (prob) => Math.random() <= prob;

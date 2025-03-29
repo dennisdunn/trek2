@@ -4,28 +4,14 @@
 
 export class System {
     constructor(template) {
-        this.propNames = Object.keys(template);
+        this.requiredKeys = Object.keys(template || {});
     }
 
     /** Run each tick before updating entities. */
-    init() { }
+    init(ecsEngine) { }
 
-    _canUpdate(entity) {
-        let retVal = true;
-        const keys = Object.keys(entity);
-        this.propNames.forEach(propName => {
-            if (!keys.includes(propName)) {
-                retVal = false;
-            }
-        });
-        return retVal;
-    }
-
-    _tick(timestamp, entity) {
-        if (this.update && this._canUpdate(entity)) {
-            this.update(timestamp, entity);
-        }
-    }
+    /** Run for each entity */
+    update(entity) { }
 }
 
 export class ECS {
@@ -36,7 +22,7 @@ export class ECS {
     }
     start() {
         this._running = true;
-        requestAnimationFrame(timestamp => this._tick(timestamp))
+        requestAnimationFrame(timestamp => this.update(timestamp))
     }
 
     stop() {
@@ -47,16 +33,42 @@ export class ECS {
         return this._running;
     }
 
-    _tick(timestamp) {
+    getById(id) {
+        return this.entities.find(entity => entity.id === id)
+    }
+
+    getBy(prop, value) {
+        return this.entities.find(entity => entity[prop] === value)
+    }
+
+    getAllBy(prop, value) {
+        return this.entities.filter(entity => entity[prop] === value)
+    }
+
+    _canUpdate(requiredKeys, entity) {
+        let retVal = true;
+        const keys = Object.keys(entity);
+        requiredKeys.forEach(requiredKey => {
+            if (!keys.includes(requiredKey)) {
+                retVal = false;
+            }
+        });
+        return retVal;
+    }
+
+    getAllByKeys(requiredKeys) {
+        return this.entities.filter(entity => this._canUpdate(requiredKeys, entity));
+    }
+
+    update(timestamp) {
         if (this._running) {
-            this.entities = this.entities.filter(entity => !entity.dead) // prune
             this.systems.forEach(system => {
-                system.init();
-                this.entities.forEach(entity => {
-                    system._tick(timestamp, entity)
+                system.init(this);
+                this.getAllByKeys(system.requiredKeys).forEach(entity => {
+                    system.update(timestamp, entity)
                 });
             });
-            requestAnimationFrame(timestamp => this._tick(timestamp))
+            requestAnimationFrame(timestamp => this.update(timestamp))
         }
     }
 }
