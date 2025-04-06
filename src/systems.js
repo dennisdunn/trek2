@@ -1,11 +1,11 @@
 import { System } from "./ecs";
-import { deg2Radian } from './tools'
+import { deg2Radian, randInt } from './tools'
 
 /**
  * Remove dead entities.
  */
 export class Prune extends System {
-    constructor(){
+    constructor() {
         super();
     }
 
@@ -25,7 +25,7 @@ export class Logger extends System {
     update(ts, entity) {
         if (entity.msg) {
             const el = document.createElement('div');
-            el.append(`${ts.toFixed(1)} ${entity.msg}`);
+            el.append(entity.msg);
             this.container.append(el);
             entity.msg = null;
         }
@@ -38,10 +38,10 @@ export class Render extends System {
         this.canvas = canvas;
     }
 
-    init() {
+    init(_) {
         this._ctx = this.canvas.getContext('2d');
-        const parent = this.canvas.parentElement;
-        this.canvas.width = parent.clientWidth-32;
+        const parent = this.canvas.parentElement; // handle resizing the window
+        this.canvas.width = parent.clientWidth - 32;
         this._ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -56,7 +56,7 @@ export class Render extends System {
                 this._ctx.rotate(deg2Radian(-entity.heading));
                 this._ctx.font = '12px Arial'
                 const text = this._ctx.measureText(entity.id);
-                this._ctx.fillText(entity.id, (-width / 2 )-text.width/8 , (-height / 2)-8);
+                this._ctx.fillText(entity.id, (-width / 2) - text.width / 8, (-height / 2) - 8);
             }
             this._ctx.restore();
         }
@@ -86,6 +86,9 @@ export class Boundry extends System {
                 case 'bounce':
                     entity.heading += entity.heading < 180 ? 180 : -180;
                     break;
+                case 'rand':
+                    entity.heading = randInt(360) // bad algorythm
+                    break;
                 default:
                     entity.dead = true;
                     break;
@@ -102,6 +105,45 @@ export class Physics extends System {
         if (entity.speed > 0) {
             entity.x += entity.speed * Math.cos((Math.PI / 180) * (entity.heading - 90));
             entity.y += entity.speed * Math.sin((Math.PI / 180) * (entity.heading - 90));
+        }
+    }
+}
+
+const collides = (a, b) => {
+    const distance = Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2))
+    return distance <= 20
+}
+
+/** 
+ * Torpedo/phasar collisions
+ */
+export class Collision extends System {
+    constructor() {
+        super({ x: 0, x: 0, shield: 0, energy: 0 })
+        this._weapons = []
+    }
+    init(engine) {
+        this._weapons = engine.getAllByKeys(['yield'])
+    }
+    update(_, entity) {
+        if (!this._weapons.includes(entity)) {
+            this._weapons.forEach(weapon => {
+                if (collides(weapon, entity)) {
+                    weapon.dead = true
+                    if (entity.shield > 0) {
+                        const boom = 0.5 * weapon.yield
+                        entity.shield -= boom
+                        // entity.msg = `SULU: ${boom} hit on ${entity.id}`
+                    } else {
+                        entity.energy -= weapon.yield
+                        // entity.msg = `SULU: ${weapon.yield} hit on ${entity.id}`
+                    }
+                    if (entity.energy <= 0) {
+                        entity.msg = `SULU: ${entity.id} has been destroyed.`
+                        entity.dead = true
+                    }
+                }
+            });
         }
     }
 }

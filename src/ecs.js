@@ -8,10 +8,10 @@ export class System {
     }
 
     /** Run each tick before updating entities. */
-    init(ecsEngine) { }
+    init(engine) { }
 
     /** Run for each entity */
-    update(entity) { }
+    update(timstamp, entity) { }
 }
 
 export class ECS {
@@ -27,6 +27,14 @@ export class ECS {
 
     stop() {
         this._running = false;
+    }
+
+    toggle() {
+        if (this._running) {
+            this.stop()
+        } else {
+            this.start()
+        }
     }
 
     isRunning() {
