@@ -1,8 +1,8 @@
 import { System } from "./ecs";
-import { deg2Radian, randInt } from './tools'
+import { deg2Radian, randInt, randTween } from './tools'
 
 /**
- * Remove dead entities.
+ * Remove all entities that have a {dead:true} component.
  */
 export class Prune extends System {
     constructor() {
@@ -21,13 +21,19 @@ export class Logger extends System {
     constructor(el) {
         super({ msg: null });
         this.container = el;
+        this._msgs = []
+    }
+    _createLine(text) {
+        const el = document.createElement('div');
+        el.innerText = text;
+        return el;
     }
     update(ts, entity) {
         if (entity.msg) {
-            const el = document.createElement('div');
-            el.append(entity.msg);
-            this.container.append(el);
+            this._msgs.unshift(entity.msg)
             entity.msg = null;
+            const msgs = this._msgs.map(this._createLine)
+            this.container.replaceChildren(...msgs)
         }
     }
 }
@@ -41,7 +47,7 @@ export class Render extends System {
     init(_) {
         this._ctx = this.canvas.getContext('2d');
         const parent = this.canvas.parentElement; // handle resizing the window
-        this.canvas.width = parent.clientWidth - 32;
+        this.canvas.width = parent.clientWidth - 32; // minus the parent padding
         this._ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -73,6 +79,30 @@ export class Boundry extends System {
         return entity.x < 0 || entity.y < 0 || entity.x > this.canvas.width || entity.y > this.canvas.height;
     }
 
+    _getDirection(heading) {
+        return heading > 45 && heading <= 135
+            ? 'e'
+            : heading > 135 && heading <= 225
+                ? 's'
+                : heading > 225 && heading <= 315
+                    ? 'w'
+                    : 'n'
+    }
+
+    /** clamp x,y to the canvas */
+    _clamp(entity) {
+        if (entity.x < 0) {
+            entity.x = 0
+        } else if (entity.x > this.canvas.width) {
+            entity.x = this.canvas.width
+        }
+        if (entity.y < 0) {
+            entity.y = 0
+        } else if (entity.y > this.canvas.height) {
+            entity.y = this.canvas.height
+        }
+    }
+
     update(_, entity) {
         if (this._outOfBounds(entity)) {
             switch (entity.boundry) {
@@ -84,10 +114,21 @@ export class Boundry extends System {
                     entity.y = entity.y > this.canvas.height + entity.icon.height ? 0 : entity.y;
                     break;
                 case 'bounce':
-                    entity.heading += entity.heading < 180 ? 180 : -180;
-                    break;
-                case 'rand':
-                    entity.heading = randInt(360) // bad algorythm
+                    switch (this._getDirection(entity.heading)) {
+                        case 'n':
+                            entity.heading = randTween(45, 315)
+                            break;
+                        case 'e':
+                            entity.heading = randTween(135, 405) % 360
+                            break;
+                        case 's':
+                            entity.heading = randTween(225, 495) % 360
+                            break
+                        case 'w':
+                            entity.heading = randTween(315, 585) % 360
+                            break;
+                    }
+                    this._clamp(entity)
                     break;
                 default:
                     entity.dead = true;
@@ -144,6 +185,21 @@ export class Collision extends System {
                     }
                 }
             });
+        }
+    }
+}
+
+/**
+ * Remove an entity if the current time > entity.ttl.
+ */
+export class Ageout extends System {
+    constructor() {
+        super({ ttl: 0 })
+    }
+
+    update(t, entity) {
+        if (t >= entity.ttl) {
+            entity.dead = true
         }
     }
 }

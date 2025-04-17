@@ -1,6 +1,6 @@
 import './style.css'
 import ECS from './ecs';
-import { Logger, Render, Physics, Boundry, Prune, Collision } from './systems';
+import { Logger, Render, Physics, Boundry, Prune, Collision, Ageout } from './systems';
 import { mkIcon, bindHandler, randPos, randNav, p, randInt } from './tools';
 
 const klingons = [
@@ -21,18 +21,19 @@ const klingons = [
   "IKS Y'tem"
 ]
 
-ECS.systems.push(new Logger(document.getElementById("msgcontainer")));
-ECS.systems.push(new Prune(document.getElementById("msgcontainer")));
+ECS.systems.push(new Logger(document.getElementById("msgcontainer")))
+ECS.systems.push(new Ageout())
+ECS.systems.push(new Prune())
 ECS.systems.push(new Physics())
 ECS.systems.push(new Collision())
-ECS.systems.push(new Boundry(document.getElementById("plotter")));
-ECS.systems.push(new Render(document.getElementById("plotter")));
+ECS.systems.push(new Boundry(document.getElementById("plotter")))
+ECS.systems.push(new Render(document.getElementById("plotter")))
 
-ECS.entities.push({ id: 'NCC-1701', icon: mkIcon('/assets/starship.svg', 0.07, '#007'), boundry: 'wrap', ...randPos(600, 300), ...randNav(3, 360) });
+ECS.entities.push({ id: 'NCC-1701', icon: mkIcon('/assets/starship.svg', 0.07, '#707'), boundry: 'wrap', ...randPos(600, 300), ...randNav(3, 360) });
 ECS.entities.push({ id: 'Pegasus', icon: mkIcon('/assets/dock.svg', 0.1, '#070'), ...randPos(400, 150) });
 
 for (let x = 0; x < 10; x++) {
-  ECS.entities.push({ id: `${klingons[x]}`, shield: randInt(100), energy: randInt(500), icon: mkIcon('/assets/klingon.svg', 0.05, '#700'), boundry: p(0.5) ? 'rand' : 'wrap', ...randPos(600, 300), ...randNav(3, 360) })
+  ECS.entities.push({ id: `${klingons[x]}`, shield: randInt(100), energy: randInt(500), icon: mkIcon('/assets/klingon.svg', 0.05, '#700'), boundry: p(0.9) ? 'bounce' : 'wrap', ...randPos(600, 300), ...randNav(3, 360) })
 }
 
 const ncc1701 = ECS.getById('NCC-1701');
