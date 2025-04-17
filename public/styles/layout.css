@@ -1,0 +1,37 @@
+
+.screen {
+  height: 90vh;
+  display: grid;
+  grid-gap: 24px;
+  margin: 8px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 40% 40% 20%;
+  grid-template-areas:
+    'sci sci status comms'
+    'sci sci eng eng'
+    'helm helm tac tac';
+}
+
+.screen .sci {
+  grid-area: sci;
+}
+
+.screen .status {
+  grid-area: status;
+}
+
+.screen .comms {
+  grid-area: comms;
+}
+
+.screen .eng {
+  grid-area: eng;
+}
+
+.screen .helm {
+  grid-area: helm;
+}
+
+.screen .tac {
+  grid-area: tac;
+}

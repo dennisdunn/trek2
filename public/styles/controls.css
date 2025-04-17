@@ -1,0 +1,16 @@
+.content .button {
+    width: 5rem;
+    border-radius: 0.5rem;
+    margin:0rem 0.5rem;
+}
+
+.content .button:hover{
+    color:var(--on-accent);
+    background-color: var(--accent);
+}
+
+.content.row {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

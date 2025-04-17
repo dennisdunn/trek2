@@ -20,6 +20,18 @@ export class ECS {
         this.entities = [];
         this._running = false;
     }
+
+    _canUpdate(requiredKeys, entity) {
+        let retVal = true;
+        const keys = Object.keys(entity);
+        requiredKeys.forEach(requiredKey => {
+            if (!keys.includes(requiredKey)) {
+                retVal = false;
+            }
+        });
+        return retVal;
+    }
+
     start() {
         this._running = true;
         requestAnimationFrame(timestamp => this.update(timestamp))
@@ -51,17 +63,6 @@ export class ECS {
 
     getAllBy(prop, value) {
         return this.entities.filter(entity => entity[prop] === value)
-    }
-
-    _canUpdate(requiredKeys, entity) {
-        let retVal = true;
-        const keys = Object.keys(entity);
-        requiredKeys.forEach(requiredKey => {
-            if (!keys.includes(requiredKey)) {
-                retVal = false;
-            }
-        });
-        return retVal;
     }
 
     getAllByKeys(requiredKeys) {
