@@ -1,5 +1,7 @@
 /**
  * Entity-Component-System
+ * 
+ * An entity is a js Object while components are properties of the object.
  */
 
 export class System {
@@ -81,6 +83,3 @@ export class ECS {
         }
     }
 }
-
-const instance = new ECS();
-export default instance;

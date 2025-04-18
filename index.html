@@ -30,16 +30,16 @@
     </div>
     <div class="comms frame partial">
       <div class="title">Communications</div>
-      <div class="content"></div>
+      <div id="msgs" class="content"></div>
     </div>
     <div class="helm frame partial mirror flip">
       <div class="title">Helm</div>
       <div class="content row">
         <div> <button class="button">CCW</button>
-          Heading: 135&deg;
+          Heading: 0&deg;
           <button class="button">CW</button>
         </div>
-        <div>Impulse: 100 <input type="range" min="0" max="500"></div>
+        <div>Impulse: 0 <input type="range" min="0" max="500" value="0"></div>
       </div>
     </div>
     <div class="eng frame std">
@@ -47,12 +47,12 @@
       <div class="content row">
         <div>Energy: 3000</div>
         <div>
-          <label for="phasars">Phasars: 100</label>
-          <input id="phasars" type="range" class="vertical" min="0" max="500">
+          <label for="phasars">Phasars: 0</label>
+          <input id="phasars" type="range" class="vertical" min="0" max="500" value="0">
         </div>
         <div>
-          <label for="shields">Shields: 100</label>
-          <input id="shields" type="range" class="vertical" min="0" max="500">
+          <label for="shields">Shields: 0</label>
+          <input id="shields" type="range" class="vertical" min="0" max="500" value="0">
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@
       <div class="title">Tactical</div>
       <div class="content row">
         <div>
-          Phasars: 200 <button class="button">Fire</button>
+          Phasars: 0 <button class="button">Fire</button>
         </div>
         <div>Torpedos: 10
           <button class="button">Launch</button>
@@ -68,7 +68,7 @@
       </div>
     </div>
   </div>
-
+  <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>
