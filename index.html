@@ -7,9 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="/styles/layout.css" rel="stylesheet" />
   <link href="/styles/controls.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/gh/dennisdunn/protokuda@1.4.4/dist/protokuda.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/gh/dennisdunn/protokuda@1.4.4/dist/themes/atomictangerine.min.css"
+  <link href="https://cdn.jsdelivr.net/gh/dennisdunn/protokuda@1.4.5/dist/protokuda.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/dennisdunn/protokuda@1.4.5/dist/themes/atomictangerine.min.css"
     rel="stylesheet" />
+
   <title>Trek - The Game</title>
 </head>
 
@@ -25,7 +26,7 @@
     </div>
     <div class="status frame statusline">
       <div class="title">Status</div>
-      <div class="status">Stardate 2910.34</div>
+      <div class="status">Stardate <span name="stardate">2034.91</span></div>
       <div class="content"></div>
     </div>
     <div class="comms frame partial">
@@ -35,24 +36,29 @@
     <div class="helm frame partial mirror flip">
       <div class="title">Helm</div>
       <div class="content row">
-        <div> <button class="button">CCW</button>
-          Heading: 0&deg;
-          <button class="button">CW</button>
+        <div class="row">
+          <button onclick="heading(-5)" class="button">CCW</button>
+          Heading: <span name="heading" class="fixed">0</span>
+          <button onclick="heading(5)" class="button">CW</button>
         </div>
-        <div>Impulse: 0 <input type="range" min="0" max="500" value="0"></div>
+        <div class="row">Impulse: <span name="speed" class="fixed">0</span> <input type="range" oninput="impulse(this)" min="0" max="500" value="0">
+        </div>
       </div>
     </div>
     <div class="eng frame std">
       <div class="title">Engineering</div>
       <div class="content row">
-        <div>Energy: 3000</div>
-        <div>
-          <label for="phasars">Phasars: 0</label>
-          <input id="phasars" type="range" class="vertical" min="0" max="500" value="0">
+        <div class="col">
+          <div>Energy: <span name="energy" class="fixed">0</span></div>
+          <button class="button">Engage Warp</button>
         </div>
         <div>
-          <label for="shields">Shields: 0</label>
-          <input id="shields" type="range" class="vertical" min="0" max="500" value="0">
+          <label for="phasars">Phasars: <span name="phasar" class="fixed">0</span></label>
+          <input id="phasars" oninput="phasar(this)" type="range" class="vertical" min="0" max="500" value="0">
+        </div>
+        <div>
+          <label for="shields">Shields: <span name="shield" class="fixed">0</span></label>
+          <input id="shields" oninput="shield(this)" type="range" class="vertical" min="0" max="500" value="0">
         </div>
       </div>
     </div>
@@ -60,14 +66,15 @@
       <div class="title">Tactical</div>
       <div class="content row">
         <div>
-          Phasars: 0 <button class="button">Fire</button>
+          Phasars: <span name="phasar" class="fixed">0</span> <button onclick="fire()" class="button">Fire</button>
         </div>
-        <div>Torpedos: 10
-          <button class="button">Launch</button>
+        <div>Torpedos: <span name="torpedo" class="fixed">0</span>
+          <button class="button" onclick="launch()">Launch</button>
         </div>
       </div>
     </div>
   </div>
+
   <script type="module" src="/src/main.js"></script>
 </body>
 

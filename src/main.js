@@ -1,11 +1,66 @@
-import { Logger, Render, Physics, Boundry, Prune, Collision, Ageout } from './systems';
-import {ECS, mkIcon, bindHandler, randPos, randNav, p, randInt } from './lib';
+import { Logger, Render, Physics, Boundry, Prune, Refresh, Collision, Ageout } from './systems';
+import { ECS, mkIcon, bindHandler, randPos, randNav, p, randInt } from './lib';
+
+const player = {
+    dirty: true, // forces initial refresh
+    energy: 3000,
+    shield: 0,
+    phasar: 0,
+    torpedo: 10,
+    heading: 0,
+    speed: 0,
+    x: 0,
+    y: 0,
+}
+
+
+window.launch = () => {
+    if (player.torpedo) {
+        player.torpedo -= 1
+        player.dirty = true
+        // inject a torpedo entity
+    } else {
+        player.msg = "Torpedo tubes are empty!"
+    }
+}
+
+window.fire = () => {
+    if (player.energy >= player.phasar) {
+        player.energy -= player.phasar
+        player.dirty = true
+        // inject a phasar entity
+    } else {
+        player.msg = "Insufficient energy for phasars!"
+    }
+}
+
+window.phasar = (ctl) => {
+    player.phasar = ctl.value
+    player.dirty = true
+}
+
+window.shield = (ctl) => {
+    player.shield = ctl.value
+    player.dirty = true
+}
+
+window.impulse = (ctl) => {
+    player.speed = ctl.value
+    player.dirty = true
+}
+
+window.heading = (x) => {
+    player.heading += x
+    player.dirty = true
+}
 
 const engine = new ECS()
 
 engine.systems.push(new Logger(document.getElementById("msgs")))
-// engine.systems.push(new Ageout())
 engine.systems.push(new Prune())
+engine.systems.push(new Refresh())
+
+// engine.systems.push(new Ageout())
 // engine.systems.push(new Physics())
 // engine.systems.push(new Collision())
 // engine.systems.push(new Boundry(document.getElementById("plotter")))
@@ -31,6 +86,7 @@ engine.systems.push(new Prune())
 
 // ncc1701.msg = 'SPOCK: Captain on deck
 
-engine.entities.push({msg:"SPOCK: Captain on deck.", dead:true})
+engine.entities.push(player);
+engine.entities.push({ msg: "SPOCK: Captain on deck.", dead: true })
 
 engine.start()
