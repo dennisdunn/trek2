@@ -4,12 +4,12 @@
   display: grid;
   grid-gap: 24px;
   margin: 8px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-template-rows: 40% 40% 20%;
   grid-template-areas:
-    'sci sci status comms'
-    'sci sci eng eng'
-    'helm helm tac tac';
+    'sci sci sci status comms comms'
+    'sci sci sci eng eng eng'
+    'helm helm  helm tac tac tac';
 }
 
 .screen .sci {
