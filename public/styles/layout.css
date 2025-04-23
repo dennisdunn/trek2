@@ -49,3 +49,14 @@ canvas {
   height: 100%;
   width: 100%;
 }
+
+.comms .content {
+  display: flex;
+  flex-direction: column-reverse;
+  position: relative;
+  width: 90%;
+  height: 80%;
+  overflow: scroll;
+  scrollbar-color: var(--accent) var(--primary);
+  scrollbar-width: thin;
+}

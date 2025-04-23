@@ -18,7 +18,6 @@ export class Message extends System {
 
     update(_, entity) {
         if (entity.msg) {
-            console.log(entity.msg)
             this._msgs.unshift(entity.msg)
             delete entity.msg
             const msgs = this._msgs.map(this._createLine)

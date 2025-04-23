@@ -56,10 +56,10 @@ window.heading = (x) => {
 
 const engine = new ECS()
 
-engine.systems.push(new Message("div.comms div.content"))
+engine.systems.push(new Message(".comms .content"))
 engine.systems.push(new Prune())
 engine.systems.push(new Refresh())
-engine.systems.push(new Render("div.sci canvas"))
+engine.systems.push(new Render(".sci canvas"))
 
 // engine.systems.push(new Ageout())
 // engine.systems.push(new Physics())
