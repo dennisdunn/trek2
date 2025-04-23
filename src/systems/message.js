@@ -3,18 +3,20 @@ import { System } from "../lib"
 /**
  * Add messages to the comms panel.
  */
-export class Logger extends System {
-    constructor(el) {
-        super({ msg: null });
-        this.container = el;
+export class Message extends System {
+    constructor(selector) {
+        super("msg");
+        this.container = document.querySelector(selector);
         this._msgs = []
     }
+
     _createLine(text) {
         const el = document.createElement('div');
         el.innerText = text;
         return el;
     }
-    update(ts, entity) {
+
+    update(_, entity) {
         if (entity.msg) {
             console.log(entity.msg)
             this._msgs.unshift(entity.msg)
@@ -25,4 +27,4 @@ export class Logger extends System {
     }
 }
 
-export default Logger
+export default Message

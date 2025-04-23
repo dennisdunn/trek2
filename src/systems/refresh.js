@@ -2,7 +2,7 @@ import { System } from "../lib"
 
 export class Refresh extends System {
     constructor() {
-        super({ dirty: true })
+        super("dirty")
     }
 
     _refresh(name,value) {

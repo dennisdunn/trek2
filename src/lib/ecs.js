@@ -5,8 +5,8 @@
  */
 
 export class System {
-    constructor(template) {
-        this.requiredKeys = Object.keys(template || {});
+    constructor(...keys) {
+        this.requiredKeys = keys;
     }
 
     /** Run each tick before updating entities. */
