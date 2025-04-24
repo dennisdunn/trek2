@@ -6,20 +6,24 @@
 
 export class System {
     constructor(...keys) {
-        this.requiredKeys = keys;
+        this._requiredKeys = keys;
+        this._engine = null;
     }
 
     /** Run each tick before updating entities. */
-    init(engine) { }
+    beforeupdate() { }
 
     /** Run for each entity */
     update(timstamp, entity) { }
+
+    /** Run each tick after updating entities. */
+    afterupdate() { }
 }
 
 export class ECS {
     constructor() {
-        this.systems = [];
-        this.entities = [];
+        this._systems = [];
+        this._entities = [];
         this._running = false;
     }
 
@@ -34,9 +38,22 @@ export class ECS {
         return retVal;
     }
 
+    _tick(timestamp) {
+        if (this._running) {
+            this._systems.forEach(system => {
+                system.beforeupdate();
+                this.getAllByKeys(system._requiredKeys).forEach(entity => {
+                    system.update(timestamp, entity)
+                });
+                system.afterupdate();
+            });
+            requestAnimationFrame(timestamp => this._tick(timestamp))
+        }
+    }
+
     start() {
         this._running = true;
-        requestAnimationFrame(timestamp => this.update(timestamp))
+        requestAnimationFrame(timestamp => this._tick(timestamp))
     }
 
     stop() {
@@ -55,31 +72,50 @@ export class ECS {
         return this._running;
     }
 
+    /** Systems management */
+
+    addSystem(system) {
+        if (!this._systems.includes(system)) {
+            this._systems.push(system)
+            system._engine = this;
+        }
+    }
+
+    removeSystem(system) {
+        const idx = this._systems.indexOf(system)
+        if (idx >= 0) {
+            this._systems.splice(idx, 1)
+        }
+    }
+
+    /** Entity management */
+
+    addEntity(entity) {
+        if (!this._entities.includes(entity)) {
+            this._entities.push(entity)
+        }
+    }
+
+    removeEntity(entity) {
+        const idx = this._entities.indexOf(entity)
+        if (idx >= 0) {
+            this._entities.splice(idx, 1)
+        }
+    }
+
     getById(id) {
-        return this.entities.find(entity => entity.id === id)
+        return this._entities.find(entity => entity.id === id)
     }
 
     getBy(prop, value) {
-        return this.entities.find(entity => entity[prop] === value)
+        return this._entities.find(entity => entity[prop] === value)
     }
 
     getAllBy(prop, value) {
-        return this.entities.filter(entity => entity[prop] === value)
+        return this._entities.filter(entity => entity[prop] === value)
     }
 
     getAllByKeys(requiredKeys) {
-        return this.entities.filter(entity => this._canUpdate(requiredKeys, entity));
-    }
-
-    update(timestamp) {
-        if (this._running) {
-            this.systems.forEach(system => {
-                system.init(this);
-                this.getAllByKeys(system.requiredKeys).forEach(entity => {
-                    system.update(timestamp, entity)
-                });
-            });
-            requestAnimationFrame(timestamp => this.update(timestamp))
-        }
+        return this._entities.filter(entity => this._canUpdate(requiredKeys, entity));
     }
 }

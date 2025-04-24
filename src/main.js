@@ -56,22 +56,22 @@ window.heading = (x) => {
 
 const engine = new ECS()
 
-engine.systems.push(new Message(".comms .content"))
-engine.systems.push(new Prune())
-engine.systems.push(new Refresh())
-engine.systems.push(new Physics())
-engine.systems.push(new Boundry(".sci canvas"))
-engine.systems.push(new Render(".sci canvas"))
+engine.addSystem(new Message(".comms .content"))
+engine.addSystem(new Prune())
+engine.addSystem(new Refresh())
+engine.addSystem(new Physics())
+engine.addSystem(new Boundry(".sci canvas"))
+engine.addSystem(new Render(".sci canvas"))
 
-// engine.systems.push(new Ageout())
-// engine.systems.push(new Collision())
-// engine.systems.push(new Render(document.getElementById("plotter")))
+// engine.addSystem(new Ageout())
+// engine.addSystem(new Collision())
+// engine.addSystem(new Render(document.getElementById("plotter")))
 
-engine.entities.push({ id: 'NCC-1701', icon: mkIcon('/assets/starship.svg', 0.07, '#707'), boundry: 'wrap', ...randPos(600, 300), ...randNav(3, 360) });
-// engine.entities.push({ id: 'Pegasus', icon: mkIcon('/assets/dock.svg', 0.1, '#070'), ...randPos(400, 150) });
+engine.addEntity({ id: 'NCC-1701', icon: mkIcon('/assets/starship.svg', 0.07, '#707'), boundry: 'wrap', ...randPos(600, 300), ...randNav(3, 360) });
+// engine.addEntity({ id: 'Pegasus', icon: mkIcon('/assets/dock.svg', 0.1, '#070'), ...randPos(400, 150) });
 
 // for (let x = 0; x < 10; x++) {
-//   engine.entities.push({ id: `${klingons[x]}`, shield: randInt(100), energy: randInt(500), icon: mkIcon('/assets/klingon.svg', 0.05, '#700'), boundry: p(0.9) ? 'bounce' : 'wrap', ...randPos(600, 300), ...randNav(3, 360) })
+//   engine.addEntity({ id: `${klingons[x]}`, shield: randInt(100), energy: randInt(500), icon: mkIcon('/assets/klingon.svg', 0.05, '#700'), boundry: p(0.9) ? 'bounce' : 'wrap', ...randPos(600, 300), ...randNav(3, 360) })
 // }
 
 // const ncc1701 = engine.getById('NCC-1701');
@@ -87,7 +87,7 @@ engine.entities.push({ id: 'NCC-1701', icon: mkIcon('/assets/starship.svg', 0.07
 
 // ncc1701.msg = 'SPOCK: Captain on deck
 
-engine.entities.push(player);
-engine.entities.push({ msg: "SPOCK: Captain on deck.", dead: true })
+engine.addEntity(player);
+engine.addEntity({ msg: "SPOCK: Captain on deck.", dead: true })
 
 engine.start()

@@ -10,7 +10,7 @@ export class Ageout extends System {
 
     update(t, entity) {
         if (t >= entity.ttl) {
-            entity.dead = true
+            this._engine.removeEntity(entity)
         }
     }
 }

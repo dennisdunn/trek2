@@ -13,9 +13,11 @@ export class Collision extends System {
         super("x", "y", "shield", "energy")
         this._weapons = []
     }
-    init(engine) {
-        this._weapons = engine.getAllByKeys(['yield'])
+
+    beforeupdate() {
+        this._weapons = this._engine.getAllByKeys(['yield'])
     }
+
     update(_, entity) {
         if (!this._weapons.includes(entity)) {
             this._weapons.forEach(weapon => {

@@ -8,8 +8,10 @@ export class Prune extends System {
         super("dead");
     }
 
-    init(engine) {
-        engine.entities = engine.entities.filter(entity => !entity.dead)
+    update(_, entity) {
+        if (entity.dead) {
+            this._engine.removeEntity(entity)
+        }
     }
 }
 
