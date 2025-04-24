@@ -5,10 +5,11 @@ export class Refresh extends System {
         super("dirty")
     }
 
-    _refresh(name,value) {
+    _refresh(name, value) {
         const els = document.getElementsByName(name)
         els.forEach(el => {
-            el.innerText = value
+            const suffix = el.getAttribute("data-suffix")
+            el.innerHTML = `${value}&nbsp;${suffix || ""}`
         });
     }
 

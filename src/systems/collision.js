@@ -10,7 +10,7 @@ const collides = (a, b) => {
  */
 export class Collision extends System {
     constructor() {
-        super({ x: 0, x: 0, shield: 0, energy: 0 })
+        super("x", "y", "shield", "energy")
         this._weapons = []
     }
     init(engine) {

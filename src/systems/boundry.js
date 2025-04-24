@@ -1,14 +1,14 @@
 import { System } from "../lib/ecs";
-import {  randTween } from '../lib/tools'
+import { randTween } from '../lib/tools'
 
 export class Boundry extends System {
-    constructor(canvas) {
-        super({ x: 0, y: 0 });
-        this.canvas = canvas;
+    constructor(selector) {
+        super("x", "y");
+        this._canvas = document.querySelector(selector);
     }
 
     _outOfBounds(entity) {
-        return entity.x < 0 || entity.y < 0 || entity.x > this.canvas.width || entity.y > this.canvas.height;
+        return entity.x < 0 || entity.y < 0 || entity.x > this._canvas.width || entity.y > this._canvas.height;
     }
 
     _getDirection(heading) {
@@ -25,13 +25,13 @@ export class Boundry extends System {
     _clamp(entity) {
         if (entity.x < 0) {
             entity.x = 0
-        } else if (entity.x > this.canvas.width) {
-            entity.x = this.canvas.width
+        } else if (entity.x > this._canvas.width) {
+            entity.x = this._canvas.width
         }
         if (entity.y < 0) {
             entity.y = 0
-        } else if (entity.y > this.canvas.height) {
-            entity.y = this.canvas.height
+        } else if (entity.y > this._canvas.height) {
+            entity.y = this._canvas.height
         }
     }
 
@@ -40,10 +40,10 @@ export class Boundry extends System {
             switch (entity.boundry) {
                 case 'wrap':
                 case 'torus':
-                    entity.x = entity.x < 0 ? this.canvas.width - entity.icon.width : entity.x;
-                    entity.x = entity.x > this.canvas.width + entity.icon.width ? 0 : entity.x;
-                    entity.y = entity.y < 0 ? this.canvas.height : entity.y;
-                    entity.y = entity.y > this.canvas.height + entity.icon.height ? 0 : entity.y;
+                    entity.x = entity.x < 0 ? this._canvas.width - entity.icon.width : entity.x;
+                    entity.x = entity.x > this._canvas.width + entity.icon.width ? 0 : entity.x;
+                    entity.y = entity.y < 0 ? this._canvas.height : entity.y;
+                    entity.y = entity.y > this._canvas.height + entity.icon.height ? 0 : entity.y;
                     break;
                 case 'bounce':
                     switch (this._getDirection(entity.heading)) {

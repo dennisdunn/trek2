@@ -5,7 +5,7 @@ import { System } from "../lib"
  */
 export class Prune extends System {
     constructor() {
-        super();
+        super("dead");
     }
 
     init(engine) {

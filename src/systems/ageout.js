@@ -5,7 +5,7 @@ import { System } from "../lib"
  */
 export class Ageout extends System {
     constructor() {
-        super({ ttl: 0 })
+        super("ttl")
     }
 
     update(t, entity) {

@@ -35,22 +35,22 @@ window.fire = () => {
 }
 
 window.phasar = (ctl) => {
-    player.phasar = ctl.value
+    player.phasar =  Number.parseFloat(ctl.value)
     player.dirty = true
 }
 
 window.shield = (ctl) => {
-    player.shield = ctl.value
+    player.shield =  Number.parseFloat(ctl.value)
     player.dirty = true
 }
 
 window.impulse = (ctl) => {
-    player.speed = ctl.value
+    player.speed = Number.parseFloat(ctl.value)
     player.dirty = true
 }
 
 window.heading = (x) => {
-    player.heading += x
+    player.heading +=  Number.parseFloat(x)
     player.dirty = true
 }
 
@@ -59,15 +59,15 @@ const engine = new ECS()
 engine.systems.push(new Message(".comms .content"))
 engine.systems.push(new Prune())
 engine.systems.push(new Refresh())
+engine.systems.push(new Physics())
+engine.systems.push(new Boundry(".sci canvas"))
 engine.systems.push(new Render(".sci canvas"))
 
 // engine.systems.push(new Ageout())
-// engine.systems.push(new Physics())
 // engine.systems.push(new Collision())
-// engine.systems.push(new Boundry(document.getElementById("plotter")))
 // engine.systems.push(new Render(document.getElementById("plotter")))
 
-// engine.entities.push({ id: 'NCC-1701', icon: mkIcon('/assets/starship.svg', 0.07, '#707'), boundry: 'wrap', ...randPos(600, 300), ...randNav(3, 360) });
+engine.entities.push({ id: 'NCC-1701', icon: mkIcon('/assets/starship.svg', 0.07, '#707'), boundry: 'wrap', ...randPos(600, 300), ...randNav(3, 360) });
 // engine.entities.push({ id: 'Pegasus', icon: mkIcon('/assets/dock.svg', 0.1, '#070'), ...randPos(400, 150) });
 
 // for (let x = 0; x < 10; x++) {
@@ -78,8 +78,8 @@ engine.systems.push(new Render(".sci canvas"))
 
 // bindHandler('left', 'click', ncc1701, obj => obj.heading -= 5);
 // bindHandler('right', 'click', ncc1701, obj => obj.heading += 5);
-// bindHandler('fire', 'click', ncc1701, obj => engine.entities.unshift({ icon: mkIcon('/assets/phasar.svg', 0.03, '#f07'), x: obj.x, y: obj.y, heading: obj.heading, speed: 5, yield: 10 }));
-// bindHandler('torp', 'click', ncc1701, obj => engine.entities.unshift({ icon: mkIcon('/assets/torpedo.svg', 0.015, '#f07'), x: obj.x, y: obj.y, heading: obj.heading, speed: 4, yield: 50 }));
+//  bindHandler('fire', 'click', player, obj => engine.entities.unshift({ icon: mkIcon('/assets/phasar.svg', 0.03, '#f07'), x: obj.x, y: obj.y, heading: obj.heading, speed: 5, yield: 10 }));
+// bindHandler('launch', 'click', player, obj => engine.entities.unshift({ icon: mkIcon('/assets/torpedo.svg', 0.015, '#f07'), x: obj.x, y: obj.y, heading: obj.heading, speed: 4, yield: 50 }));
 // bindHandler('speed', 'input', ncc1701, (obj, evt) => obj.speed = evt.target.value);
 // bindHandler('shield', 'click', ncc1701, (obj, evt) => obj.shield = evt.target.checked);
 // bindHandler('pause', 'click', engine, (obj, evt) => obj.toggle());

@@ -2,7 +2,7 @@ import { System } from "../lib"
 
 export class Physics extends System {
     constructor() {
-        super({ x: 0, y: 0, speed: 0, heading: 0 })
+        super("x", "y", "speed", "heading")
     }
     update(_, entity) {
         if (entity.speed > 0) {
