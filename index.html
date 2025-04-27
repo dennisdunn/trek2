@@ -28,7 +28,7 @@
     </div>
     <div class="status frame statusline">
       <div class="title">Status</div>
-      <div class="status">Stardate <span name="stardate">2034.91</span></div>
+      <div class="status">Stardate&nbsp;&nbsp;<span name="stardate" data-fixed="1">0</span></div>
       <div class="content"></div>
     </div>
     <div class="comms frame partial">
@@ -38,21 +38,19 @@
     <div class="helm frame partial mirror flip">
       <div class="title">Helm</div>
       <div class="content row">
-        <div class="row">
-          <button id="rs-btn" class="button">RS</button><!-- Rotāre Sinister -->
-          Heading: <span name="heading" class="fixed" data-suffix="&deg;">0</span>
-          <button id="rd-btn" class="button">RD</button><!-- Rotāre Dexter -->
-        </div>
-        <div class="row">Impulse: <span name="speed" class="fixed" data-suffix="%">0</span> <input id="impulse-btn"
-            type="range" min="0" max="4" step="0.1">
-        </div>
+        <button id="rs-btn" class="button">RS</button><!-- Rotāre Sinister -->
+        Heading: <span name="heading" class="fixed" data-suffix="&deg;">0</span>
+        <button id="rd-btn" class="button">RD</button><!-- Rotāre Dexter -->
+        <label for="impulse-btn" class="row">Impulse: <span name="speed" class="fixed"
+            data-suffix="kps">0</span></label>
+        <input id="impulse-btn" type="range" min="0" max="4" step="0.1">
       </div>
     </div>
     <div class="eng frame std">
       <div class="title">Engineering</div>
       <div class="content row">
         <div class="col">
-          <div>Energy: <span name="energy" class="fixed" data-suffix="Tw">0</span></div>
+          <label for="warp-btn">Energy: <span name="energy" class="fixed" data-suffix="Tw">0</span></label>
           <button id="warp-btn" class="button">Engage Warp</button>
         </div>
         <div>
@@ -68,13 +66,12 @@
     <div class="tac frame partial flip">
       <div class="title">Tactical</div>
       <div class="content row">
-        <div>
-          Phasars: <span name="phasar" class="fixed" data-suffix="Tw">0</span> <button id="fire-btn"
-            class="button">Fire</button>
-        </div>
-        <div>Torpedos: <span name="torpedo" class="fixed">0</span>
-          <button id="launch-btn" class="button">Launch</button>
-        </div>
+        <label for="fire-btn">Phasars: <span name="phasar" class="fixed" data-suffix="Tw">0</span>
+        </label>
+        <button id="fire-btn" class="button">Fire</button>
+        <label for="launch-btn">Torpedos: <span name="torpedo" class="fixed">0</span>
+        </label>
+        <button id="launch-btn" class="button">Launch</button>
       </div>
     </div>
   </div>

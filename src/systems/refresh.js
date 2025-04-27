@@ -9,12 +9,15 @@ export class Refresh extends System {
         const els = document.getElementsByName(name)
         els.forEach(el => {
             const suffix = el.getAttribute("data-suffix")
-            el.innerHTML = `${value}&nbsp;${suffix || ""}`
+            const fixed = el.getAttribute("data-fixed")
+            const val = fixed ? value.toFixed(fixed) : value
+            const suf = suffix ? `&nbsp;${suffix}` : ""
+            el.innerHTML = `${val}${suf}`
         });
     }
 
     update(_, entity) {
-        const names = Object.keys(entity)
+        const names = Object.keys(entity).filter(property => !property.startsWith("_"))
         names.forEach(name => {
             this._refresh(name, entity[name])
         });
