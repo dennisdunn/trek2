@@ -19,17 +19,19 @@ export class EntityBuilder {
 
     register(...properties) {
         properties.forEach(property => {
-            Object.defineProperty(this.entity, property, {
-                set: function (value) {
-                    this[`_${property}`] = value
-                    this.dirty = true
-                    return this
-                },
-                get: function () {
-                    return this[`_${property}`]
-                },
-                enumerable: true
-            })
+            if (!property.startsWith("_")) {
+                Object.defineProperty(this.entity, property, {
+                    set: function (value) {
+                        this[`_${property}`] = value
+                        this.dirty = true
+                        return this
+                    },
+                    get: function () {
+                        return this[`_${property}`]
+                    },
+                    enumerable: true
+                })
+            }
         });
         return this
     }

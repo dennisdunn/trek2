@@ -17,6 +17,7 @@ engine.start()
 engine.addEntity(new EntityBuilder()
     .set("_next", 0)
     .set("stardate", 2395.2)
+    .set("missiondate", 30)
     .build())
 
 const player = new EntityBuilder()
