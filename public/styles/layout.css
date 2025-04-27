@@ -46,7 +46,6 @@
 canvas {
   position: absolute;
   background-color: var(--backdrop);
-  color: var(--on-backdrop);
   height: 100%;
   width: 100%;
 }

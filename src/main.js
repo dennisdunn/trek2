@@ -1,58 +1,6 @@
 import { Message, Render, Physics, Boundry, Prune, Refresh, Collision, Ageout } from './systems';
-import { ECS, mkIcon, bindHandler, randPos, randNav, p, randInt } from './lib';
-
-const player = {
-    dirty: true, // forces initial refresh
-    energy: 3000,
-    shield: 0,
-    phasar: 0,
-    torpedo: 10,
-    heading: 0,
-    speed: 0,
-    x: 0,
-    y: 0,
-}
-
-
-window.launch = () => {
-    if (player.torpedo) {
-        player.torpedo -= 1
-        player.dirty = true
-        // inject a torpedo entity
-    } else {
-        player.msg = "Torpedo tubes are empty!"
-    }
-}
-
-window.fire = () => {
-    if (player.energy >= player.phasar) {
-        player.energy -= player.phasar
-        player.dirty = true
-        // inject a phasar entity
-    } else {
-        player.msg = "Insufficient energy for phasars!"
-    }
-}
-
-window.phasar = (ctl) => {
-    player.phasar =  Number.parseFloat(ctl.value)
-    player.dirty = true
-}
-
-window.shield = (ctl) => {
-    player.shield =  Number.parseFloat(ctl.value)
-    player.dirty = true
-}
-
-window.impulse = (ctl) => {
-    player.speed = Number.parseFloat(ctl.value)
-    player.dirty = true
-}
-
-window.heading = (x) => {
-    player.heading +=  Number.parseFloat(x)
-    player.dirty = true
-}
+import { ECS, EntityBuilder, bindHandler, randInt, Sprite } from './lib';
+import { launch, fire } from './handlers';
 
 const engine = new ECS()
 
@@ -63,31 +11,32 @@ engine.addSystem(new Physics())
 engine.addSystem(new Boundry(".sci canvas"))
 engine.addSystem(new Render(".sci canvas"))
 
-// engine.addSystem(new Ageout())
-// engine.addSystem(new Collision())
-// engine.addSystem(new Render(document.getElementById("plotter")))
-
-engine.addEntity({ id: 'NCC-1701', icon: mkIcon('/assets/starship.svg', 0.07, '#707'), boundry: 'wrap', ...randPos(600, 300), ...randNav(3, 360) });
-// engine.addEntity({ id: 'Pegasus', icon: mkIcon('/assets/dock.svg', 0.1, '#070'), ...randPos(400, 150) });
-
-// for (let x = 0; x < 10; x++) {
-//   engine.addEntity({ id: `${klingons[x]}`, shield: randInt(100), energy: randInt(500), icon: mkIcon('/assets/klingon.svg', 0.05, '#700'), boundry: p(0.9) ? 'bounce' : 'wrap', ...randPos(600, 300), ...randNav(3, 360) })
-// }
-
-// const ncc1701 = engine.getById('NCC-1701');
-
-// bindHandler('left', 'click', ncc1701, obj => obj.heading -= 5);
-// bindHandler('right', 'click', ncc1701, obj => obj.heading += 5);
-//  bindHandler('fire', 'click', player, obj => engine.entities.unshift({ icon: mkIcon('/assets/phasar.svg', 0.03, '#f07'), x: obj.x, y: obj.y, heading: obj.heading, speed: 5, yield: 10 }));
-// bindHandler('launch', 'click', player, obj => engine.entities.unshift({ icon: mkIcon('/assets/torpedo.svg', 0.015, '#f07'), x: obj.x, y: obj.y, heading: obj.heading, speed: 4, yield: 50 }));
-// bindHandler('speed', 'input', ncc1701, (obj, evt) => obj.speed = evt.target.value);
-// bindHandler('shield', 'click', ncc1701, (obj, evt) => obj.shield = evt.target.checked);
-// bindHandler('pause', 'click', engine, (obj, evt) => obj.toggle());
-
-
-// ncc1701.msg = 'SPOCK: Captain on deck
-
-engine.addEntity(player);
-engine.addEntity({ msg: "SPOCK: Captain on deck.", dead: true })
-
 engine.start()
+
+const player = new EntityBuilder()
+    .assign({
+        name: "NCC-1701",
+        energy: 3000,
+        shield: 0,
+        phasar: 0,
+        torpedo: 10,
+        heading: randInt(360),
+        speed: randInt(5),
+        boundry: "wrap",
+        x: randInt(1024),
+        y: randInt(1024),
+        sprite: new Sprite("/assets/starship.png", "--accent"),
+        dirty:true // force initial refresh
+    })
+    .build()
+
+player.msg = "SPOCK: Captain on deck."
+engine.addEntity(player);
+
+bindHandler("#rs-btn", "click", player, obj => obj.heading -= 5)
+bindHandler("#rd-btn", "click", player, obj => obj.heading += 5)
+bindHandler("#impulse-btn", "input", player, (obj, evt) => obj.speed = Number.parseFloat(evt.target.value))
+bindHandler("#phasar-btn", "input", player, (obj, evt) => obj.phasar = Number.parseFloat(evt.target.value))
+bindHandler("#shield-btn", "input", player, (obj, evt) => obj.shield = Number.parseFloat(evt.target.value))
+bindHandler("#fire-btn", "click", { player, engine }, fire)
+bindHandler("#launch-btn", "click", { player, engine }, launch)

@@ -7,17 +7,23 @@
 export class System {
     constructor(...keys) {
         this._requiredKeys = keys;
-        this._engine = null;
+        // this._engine = null;
     }
 
     /** Run each tick before updating entities. */
-    beforeupdate() { }
+    beforeupdate(timestamp, engine) { }
 
     /** Run for each entity */
     update(timstamp, entity) { }
 
     /** Run each tick after updating entities. */
-    afterupdate() { }
+    afterupdate(timestamp, engine) { }
+
+    // todo: this needs to go somewhere else
+    getStyle(property, selector = "body") {
+        const el = document.querySelector(selector)
+        return getComputedStyle(el).getPropertyValue(property)
+    }
 }
 
 export class ECS {
@@ -41,15 +47,18 @@ export class ECS {
     _tick(timestamp) {
         if (this._running) {
             this._systems.forEach(system => {
-                system.beforeupdate();
-                this.getAllByKeys(system._requiredKeys).forEach(entity => {
+                system.beforeupdate(timestamp, this);
+                const entities = this._entities.filter(entity => this._canUpdate(system._requiredKeys, entity));
+                entities.forEach(entity => {
                     system.update(timestamp, entity)
                 });
-                system.afterupdate();
+                system.afterupdate(timestamp, this);
             });
             requestAnimationFrame(timestamp => this._tick(timestamp))
         }
     }
+
+    /** Runtime control */
 
     start() {
         this._running = true;
@@ -66,10 +75,6 @@ export class ECS {
         } else {
             this.start()
         }
-    }
-
-    isRunning() {
-        return this._running;
     }
 
     /** Systems management */
@@ -101,21 +106,5 @@ export class ECS {
         if (idx >= 0) {
             this._entities.splice(idx, 1)
         }
-    }
-
-    getById(id) {
-        return this._entities.find(entity => entity.id === id)
-    }
-
-    getBy(prop, value) {
-        return this._entities.find(entity => entity[prop] === value)
-    }
-
-    getAllBy(prop, value) {
-        return this._entities.filter(entity => entity[prop] === value)
-    }
-
-    getAllByKeys(requiredKeys) {
-        return this._entities.filter(entity => this._canUpdate(requiredKeys, entity));
     }
 }

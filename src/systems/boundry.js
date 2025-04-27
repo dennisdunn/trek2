@@ -40,10 +40,10 @@ export class Boundry extends System {
             switch (entity.boundry) {
                 case 'wrap':
                 case 'torus':
-                    entity.x = entity.x < 0 ? this._canvas.width - entity.icon.width : entity.x;
-                    entity.x = entity.x > this._canvas.width + entity.icon.width ? 0 : entity.x;
+                    entity.x = entity.x < 0 ? this._canvas.width - entity.sprite.width : entity.x;
+                    entity.x = entity.x > this._canvas.width + entity.sprite.width ? 0 : entity.x;
                     entity.y = entity.y < 0 ? this._canvas.height : entity.y;
-                    entity.y = entity.y > this._canvas.height + entity.icon.height ? 0 : entity.y;
+                    entity.y = entity.y > this._canvas.height + entity.sprite.height ? 0 : entity.y;
                     break;
                 case 'bounce':
                     switch (this._getDirection(entity.heading)) {

@@ -2,7 +2,7 @@ import { System, deg2Radian } from "../lib"
 
 export class Render extends System {
     constructor(selector) {
-        super("x", "y", "icon");
+        super("x", "y", "sprite");
         this._canvas = document.querySelector(selector);
     }
 
@@ -15,17 +15,17 @@ export class Render extends System {
 
     update(_, entity) {
         const ctx = this._canvas.getContext('2d');
-        if (entity.icon) {
-            const { width, height } = entity.icon;
+        if (entity.sprite) {
+            const { width, height } = entity.sprite;
             ctx.save();
             ctx.translate(entity.x, entity.y);
             ctx.rotate(deg2Radian(entity.heading));
-            ctx.drawImage(entity.icon, -width / 2, -height / 2, width, height);
+            ctx.drawImage(entity.sprite, -width / 2, -height / 2, width, height);
             if (entity.name || entity.id) {
                 const str = entity.name || entity.id
                 ctx.rotate(deg2Radian(-entity.heading));
                 ctx.font = '12px Arial'
-                ctx.fillStyle = getComputedStyle(this._canvas).getPropertyValue("--accent")
+                ctx.fillStyle = this.getStyle("--on-backdrop")
                 const text = ctx.measureText(str);
                 ctx.fillText(str, (-width / 2) - text.width / 8, (-height / 2) - 8);
             }
