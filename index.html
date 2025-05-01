@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/styles/layout.css" rel="stylesheet" />
+  <link href="/styles/controls.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/dennisdunn/protokuda@1.4.5/dist/protokuda.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/dennisdunn/protokuda@1.4.5/dist/themes/atomictangerine.min.css"
+    rel="stylesheet" />
+
+  <title>Trek - The Game</title>
+  <script type="module" crossorigin src="/assets/index-CZxRZ4v3.js"></script>
+</head>
+
+<body>
+  <div id="screen" class="screen">
+    <div class="sci frame bracket sidebar">
+      <div class="title">Sciences</div>
+      <div class="items">
+        <button id="sector-btn" class="button">Sector</button>
+        <button id="quad-btn" class="button">Quad...</button>
+        <button id="freeze-btn" class="button">Freeze</button>
+      </div>
+      <div class="content">
+        <canvas></canvas>
+      </div>
+    </div>
+    <div class="status frame statusline">
+      <div class="title">Status</div>
+      <div class="status">Stardate&nbsp;&nbsp;<span name="stardate" data-fixed="1">0</span></div>
+      <div class="content col">
+        <div>Mission:&nbsp;<span name="missiondate" data-fixed="1"></span></div>
+      </div>
+    </div>
+    <div class="comms frame partial">
+      <div class="title">Communications</div>
+      <div class="content"></div>
+    </div>
+    <div class="helm frame partial mirror flip">
+      <div class="title">Helm</div>
+      <div class="content row">
+        <button id="rs-btn" class="button">RS</button><!-- Rotāre Sinister -->
+        Heading: <span name="heading" class="fixed" data-suffix="&deg;">0</span>
+        <button id="rd-btn" class="button">RD</button><!-- Rotāre Dexter -->
+        <label for="impulse-btn" class="row">Impulse: <span name="speed" class="fixed"
+            data-suffix="kps">0</span></label>
+        <input id="impulse-btn" type="range" min="0" max="4" step="0.1">
+      </div>
+    </div>
+    <div class="eng frame std">
+      <div class="title">Engineering</div>
+      <div class="content row">
+        <div class="col">
+          <label for="warp-btn">Energy: <span name="energy" class="fixed" data-suffix="Tw">0</span></label>
+          <button id="warp-btn" class="button">Engage Warp</button>
+        </div>
+        <div>
+          <label for="phasar-btn">Phasars: <span name="phasar" class="fixed" data-suffix="Tw">0</span></label>
+          <input id="phasar-btn" type="range" class="vertical" min="0" max="500" value="0">
+        </div>
+        <div>
+          <label for="shield-btn">Shields: <span name="shield" class="fixed" data-suffix="Tw">0</span></label>
+          <input id="shield-btn" type="range" class="vertical" min="0" max="500" value="0">
+        </div>
+      </div>
+    </div>
+    <div class="tac frame partial flip">
+      <div class="title">Tactical</div>
+      <div class="content row">
+        <label for="fire-btn">Phasars: <span name="phasar" class="fixed" data-suffix="Tw">0</span>
+        </label>
+        <button id="fire-btn" class="button">Fire</button>
+        <label for="launch-btn">Torpedos: <span name="torpedo" class="fixed">0</span>
+        </label>
+        <button id="launch-btn" class="button">Launch</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

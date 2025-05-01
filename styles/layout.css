@@ -1,0 +1,62 @@
+.screen {
+  height: 90vh;
+  display: grid;
+  grid-gap: 24px;
+  margin: 8px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 40% 40% 20%;
+  grid-template-areas:
+    'sci sci sci status comms comms'
+    'sci sci sci eng eng eng'
+    'helm helm  helm tac tac tac';
+}
+
+.screen .sci {
+  grid-area: sci;
+}
+
+.screen .status {
+  grid-area: status;
+}
+
+.screen .comms {
+  grid-area: comms;
+}
+
+.screen .eng {
+  grid-area: eng;
+}
+
+.screen .helm {
+  grid-area: helm;
+}
+
+.screen .tac {
+  grid-area: tac;
+}
+
+
+.sci .content {
+  position: relative;
+  background-color: green;
+  height: 90%;
+  width: 90%;
+}
+
+canvas {
+  position: absolute;
+  background-color: var(--backdrop);
+  height: 100%;
+  width: 100%;
+}
+
+.comms .content {
+  display: flex;
+  flex-direction: column-reverse;
+  position: relative;
+  width: 90%;
+  height: 80%;
+  overflow: scroll;
+  scrollbar-color: var(--accent) var(--primary);
+  scrollbar-width: thin;
+}
