@@ -28,7 +28,7 @@ const player = new EntityBuilder()
         phasar: 0,
         torpedo: 10,
         heading: randInt(360),
-        speed: randInt(5),
+        speed: randInt(4) + 1,
         boundry: "wrap",
         x: randInt(1024),
         y: randInt(1024),
@@ -46,3 +46,28 @@ bindHandler("#phasar-btn", "input", player, (obj, evt) => obj.phasar = Number.pa
 bindHandler("#shield-btn", "input", player, (obj, evt) => obj.shield = Number.parseFloat(evt.target.value))
 bindHandler("#fire-btn", "click", { player, engine }, fire)
 bindHandler("#launch-btn", "click", { player, engine }, launch)
+bindHandler("#freeze-btn", "click", null, () => engine.toggle())
+
+engine.addEntity({
+    name: "IKS M'Char",
+    energy: 200,
+    shield: 0,
+    heading: randInt(360),
+    speed: randInt(4) + 1,
+    boundry: "bounce",
+    x: randInt(1024),
+    y: randInt(1024),
+    sprite: new Sprite("/assets/klingon.png", "--error", 0.7)
+})
+
+engine.addEntity({
+    name: "IKS Pagh",
+    energy: 200,
+    shield: 0,
+    heading: randInt(360),
+    speed: randInt(4) + 1,
+    boundry: "wrap",
+    x: randInt(1024),
+    y: randInt(1024),
+    sprite: new Sprite("/assets/klingon.png", "--error", 0.7)
+})
