@@ -7,6 +7,11 @@ export class Sprite extends Image {
         this._apply()
     }
 
+    _resolve(){
+        const url = import.meta.env.BASE_URL + this._src // vite leaky abstraction
+        return url.replace("//","/")
+    }
+
     _apply() {
         const img = new Image();
 
@@ -25,8 +30,7 @@ export class Sprite extends Image {
 
             this.src = canvas.toDataURL();
         }
-
-        img.src = this._src;
+        img.src = this._resolve()
     }
 
     get _computedColor() {
