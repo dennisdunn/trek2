@@ -7,7 +7,6 @@
 export class System {
     constructor(...keys) {
         this._requiredKeys = keys;
-        // this._engine = null;
     }
 
     /** Run each tick before updating entities. */
