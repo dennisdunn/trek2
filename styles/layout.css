@@ -4,11 +4,11 @@
   grid-gap: 24px;
   margin: 8px;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 40% 40% 20%;
+  grid-template-rows: 30% 50% 20%;
   grid-template-areas:
-    'sci sci sci status comms comms'
-    'sci sci sci eng eng eng'
-    'helm helm  helm tac tac tac';
+    'comms comms status eng eng eng '
+    'sci sci sci sci sci sci'
+    'helm helm helm tac tac tac';
 }
 
 .screen .sci {
