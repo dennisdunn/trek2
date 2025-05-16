@@ -9,4 +9,4 @@ UI elements were broken out to a CSS file that is distributed via CDN **jsdelivr
 ![Trek2 UI](./as-built.png "UI")
 
 - [Trek2](https://dennisdunn.github.io/trek2/)
-- [Protocuda CSS Library](https://dennisdunn.github.io/protocuda/)
+- [Protokuda CSS Library](https://dennisdunn.github.io/protokuda/)
